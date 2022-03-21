@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="pt-br">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>Workshop AWS Lambda | OTTera</title>
+
+        <link rel="stylesheet" href="reveal.js/dist/reset.css">
+        <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+        <link rel="stylesheet" href="reveal.js/dist/theme/white.css">
+        <link rel="stylesheet" href="css/app.css">
+
+        <link rel="icon" href="favicon.ico" sizes="any">
+        <link rel="apple-touch-icon" href="img/favicon192.png">
+        <link rel="manifest" href="manifest.json">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h1>
+                        <span class="smaller mb-0 red">Workshop</span>
+                        AWS Lambda
+                    </h1>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>OTTera</h2>
+                        <p>
+                            Serviços OTT <em>(over-the-top)</em> para distribuição e monetização de conteúdos em
+                            diversas plataformas
+                        </p>
+                        <div class="d-flex justify-between third-columns small">
+                            <div>
+                                <h6>200+</h6> canais lineares
+                            </div>
+                            <div class="px-1">
+                                <h6>75+</h6> aplicativos OTT
+                            </div>
+                            <div>
+                                <h6>105.000.000+</h6> usuários finais
+                            </div>
+                        </div>
+                    </section>
+                    <section>
+                        <h3>
+                            <span class="subtitle">OTTera</span>
+                            Canais no Brasil
+                        </h3>
+                        <img src="img/canais.png" alt="Canais no Brasil">
+                    </section>
+                    <section id="about">
+                        <h3>
+                            <span class="subtitle">OTTera</span>
+                            Equipe presente
+                        </h3>
+                        <div class="d-flex half-columns">
+                            <div>
+                                <img src="img/adam.jpg" alt="Adam Zhu">
+                                <div>
+                                    <h6>Adam Zhu</h6>
+                                    <a href="mailto:adam@ottera.tv">adam@ottera.tv</a>
+                                </div>
+                            </div>
+                            <div>
+                                <img src="img/craig.jpg" alt="Craig McEldowney">
+                                <div>
+                                    <h6>Craig McEldowney</h6>
+                                    <a href="mailto:craig@ottera.tv">craig@ottera.tv</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex half-columns">
+                            <div>
+                                <img src="img/joe.jpg" alt="Joe Chellman">
+                                <div>
+                                    <h6>Joe Chellman</h6>
+                                    <a href="mailto:joe@ottera.tv">joe@ottera.tv</a>
+                                </div>
+                            </div>
+                            <div>
+                                <img src="img/srifkin.jpg" alt="Steve Rifkin">
+                                <div>
+                                    <h6>Steve Rifkin</h6>
+                                    <a href="mailto:srifkin@ottera.tv">srifkin@ottera.tv</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex half-columns">
+                            <div>
+                                <img src="img/vinicius.jpg" alt="Vinícius Campitelli">
+                                <div>
+                                    <h6>Vinícius Campitelli</h6>
+                                    <a href="mailto:vinicius@ottera.tv">vinicius@ottera.tv</a>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <section> <!-- Objetivo -->
+                    <h2>Objetivo</h2>
+                    <p>
+                        Mostrar a criação de um aplicação Node.js através do Lambda, serviço de Serverless da AWS
+                    </p>
+                </section> <!-- Objetivo -->
+
+                <section> <!-- Serverless -->
+                    <section>
+                        <h2>Serverless</h2>
+                        <blockquote class="small">
+                            As tecnologias sem servidores contam com escalabilidade automática, alta disponibilidade
+                            integrada e um modelo de faturamento pago por utilização para aumentar a agilidade e
+                            otimizar os custos. Estas tecnologias também eliminam as tarefas de gerenciamento de
+                            infraestrutura, como provisionamento de capacidade e patching, para que você possa se
+                            concentrar apenas em escrever códigos que atendam a seus clientes.
+                        </blockquote>
+                        <a href="https://aws.amazon.com/pt/serverless/" class="smaller" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/serverless
+                        </a>
+                    </section>
+                    <section>
+                        <h2>Serverless</h2>
+                        <blockquote class="small">
+                            In any serverless platform, the user just writes a cloud function in a high-level language,
+                            picks the event that should trigger the running of the function—such as loading an image
+                            into cloud storage or adding an image thumbnail to a database table—and lets the serverless
+                            system handle everything else: instance selection, scaling, deployment, fault tolerance,
+                            monitoring, logging, security patches, and so on.
+                        </blockquote>
+                        <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2019/EECS-2019-3.pdf" class="smaller"
+                           target="_blank" rel="noopener">
+                            Cloud Programming Simplified: A Berkeley View on Serverless Computing
+                        </a>
+                    </section>
+                    <section>
+                        <h2 class="subtitle">Serverless</h2>
+                        <h3>Diferenças vs Modelo tradicional</h3>
+                        <p>
+                            1. Decoupled computation and storage. The storage and computation scale separately and are
+                            provisioned and priced independently. In general, the storage is provided by a separate
+                            cloudservice and the computation is stateless.
+                        </p>
+                        <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2019/EECS-2019-3.pdf" class="smaller"
+                           target="_blank" rel="noopener">
+                            Cloud Programming Simplified: A Berkeley View on Serverless Computing
+                        </a>
+                    </section>
+                    <section>
+                        <h2 class="subtitle">Serverless</h2>
+                        <h3>Diferenças vs Modelo tradicional</h3>
+                        <p>
+                            2. Executing code without managing resource allocation. Instead of requesting resources, the
+                            user provides a piece of code and the cloud automatically provisions resources to execute
+                            that code.
+                        </p>
+                        <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2019/EECS-2019-3.pdf" class="smaller"
+                           target="_blank" rel="noopener">
+                            Cloud Programming Simplified: A Berkeley View on Serverless Computing
+                        </a>
+                    </section>
+                    <section>
+                        <h2 class="subtitle">Serverless</h2>
+                        <h3>Diferenças vs Modelo tradicional</h3>
+                        <p>
+                            3. Paying in proportion to resources used instead of for resources allocated. Billing is by
+                            some dimension associated with the execution, such as execution time, rather than by a
+                            dimension of the base cloud platform, such as size and number of VMs allocated.
+                        </p>
+                        <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2019/EECS-2019-3.pdf" class="smaller"
+                           target="_blank" rel="noopener">
+                            Cloud Programming Simplified: A Berkeley View on Serverless Computing
+                        </a>
+                    </section>
+                    <section>
+                        <h2 class="subtitle">Serverless</h2>
+                        <h3>Diferenças vs Modelo tradicional</h3>
+                        Comparação entre <em>serverless</em> e a "abordagem tradicional":
+                        <img src="https://dkrn4sk0rn31v.cloudfront.net/2019/02/12192144/ec2-versus-lambda.png"
+                             alt="EC2 versus Lambda"> <br>
+                        <a href="https://www2.eecs.berkeley.edu/Pubs/TechRpts/2019/EECS-2019-3.pdf" class="smaller"
+                           target="_blank" rel="noopener">
+                            Cloud Programming Simplified: A Berkeley View on Serverless Computing
+                        </a>
+                    </section>
+                </section> <!-- Serverless -->
+
+                <section> <!-- AWS Lambda -->
+                    <section>
+                        <h2>AWS Lambda</h2>
+                        <blockquote class="small">
+                            Serviço de computação sem servidor e orientado a eventos que permite executar código para
+                            praticamente qualquer tipo de aplicação ou serviço de backend sem provisionar ou gerenciar
+                            servidores. Você pode acionar o Lambda a partir de mais de 200 serviços da AWS e aplicações
+                            de software como serviço (SaaS) e pagar apenas pelo que usar.
+                        </blockquote>
+                        <a href="https://aws.amazon.com/pt/lambda/" class="small" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/lambda
+                        </a>
+                    </section>
+                    <section>
+                        <h2>AWS Lambda</h2>
+                        <blockquote class="small">
+                            O AWS Lambda executa automaticamente o código em resposta a vários eventos, como
+                            solicitações HTTP por meio do Amazon API Gateway, modificações de objetos em buckets do
+                            Amazon Simple Storage Service (Amazon S3), atualizações de tabela no Amazon DynamoDB e
+                            transições de estado no AWS Step Functions.
+                        </blockquote>
+                        <a href="https://aws.amazon.com/pt/lambda/features/" class="small" target="_blank"
+                           rel="noopener">
+                            aws.amazon.com/pt/lambda/features
+                        </a>
+                    </section>
+                    <section>
+                        <h2>AWS Lambda</h2>
+                        <blockquote class="small">
+                            O Lambda executa o código em uma infraestrutura de computação altamente disponível e executa
+                            toda a administração dos recursos de computação. Isso inclui manutenção do servidor e do
+                            sistema operacional, provisionamento de capacidade e escalabilidade automática, implantação
+                            de código e patch de segurança, além de monitoramento e registro do código. Tudo o que você
+                            precisa fazer é fornecer o código.
+                        </blockquote>
+                        <a href="https://aws.amazon.com/pt/lambda/features/" class="small" target="_blank"
+                           rel="noopener">
+                            aws.amazon.com/pt/lambda/features
+                        </a>
+                    </section>
+                    <section>
+                        <h2 class="subtitle">AWS Lambda</h2>
+                        <h3>Exemplo de Fluxo</h3>
+                        <figure>
+                            <img src="https://d1.awsstatic.com/product-marketing/Lambda/Diagrams/product-page-diagram_Lambda-RealTimeFileProcessing.a59577de4b6471674a540b878b0b684e0249a18c.png"
+                                 alt="AWS Lambda">
+                            <figcaption>Exemplo de processamento de arquivos</figcaption>
+                        </figure>
+                        <a href="https://aws.amazon.com/pt/lambda/" class="smaller" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/lambda
+                        </a>
+                    </section>
+                    <section>
+                        <h2 class="subtitle">AWS Lambda</h2>
+                        <h3>Exemplo de Fluxo</h3>
+                        <figure>
+                            <img src="https://d1.awsstatic.com/product-marketing/Lambda/Diagrams/product-page-diagram_Lambda-RealTimeStreamProcessing.d79d55b5f3a5d6b58142a6c0fc8a29eadc81c02b.png"
+                                 alt="AWS Lambda">
+                            <figcaption>Exemplo de processamento de stream de dados</figcaption>
+                        </figure>
+                        <a href="https://aws.amazon.com/pt/lambda/" class="smaller" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/lambda
+                        </a>
+                    </section>
+                    <section>
+                        <h2 class="subtitle">AWS Lambda</h2>
+                        <h3>Exemplo de Fluxo</h3>
+                        <figure>
+                            <img src="https://d1.awsstatic.com/product-marketing/Lambda/Diagrams/product-page-diagram_Lambda-IoTBackends.3440c7f50a9b73e6a084a242d44009dc0fbe5fab.png"
+                                 alt="AWS Lambda">
+                            <figcaption>Exemplo de integração com IoT</figcaption>
+                        </figure>
+                        <a href="https://aws.amazon.com/pt/lambda/" class="smaller" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/lambda
+                        </a>
+                    </section>
+                </section> <!-- AWS Lambda -->
+
+                <section> <!-- API Gateway -->
+                    <section>
+                        <h2>API Gateway</h2>
+                        <blockquote class="small">
+                            Serviço gerenciado que permite que desenvolvedores criem, publiquem, mantenham, monitorem e
+                            protejam APIs em qualquer escala com facilidade. APIs agem como a “porta de entrada” para
+                            aplicativos acessarem dados, lógica de negócios ou funcionalidade de seus serviços de
+                            back-end.
+                        </blockquote>
+                        <a href="https://aws.amazon.com/pt/api-gateway/" class="small" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/api-gateway
+                        </a>
+                    </section>
+                    <section>
+                        <h2>API Gateway</h2>
+                        <blockquote class="small">
+                            Você pode criar APIs RESTful ou WebSocket que habilitam aplicativos de comunicação
+                            bidirecionais em tempo real. O API Gateway dá suporte a cargas de trabalho conteinerizadas e
+                            sem servidor, além de aplicativos da web.
+                        </blockquote>
+                        <a href="https://aws.amazon.com/pt/api-gateway/" class="small" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/api-gateway
+                        </a>
+                    </section>
+                    <section>
+                        <h2>API Gateway</h2>
+                        <blockquote class="small">
+                            Administra todas as tarefas envolvidas no recebimento e processamento de até centenas de
+                            milhares de chamadas de API simultâneas, inclusive gerenciamento de tráfego, suporte de
+                            CORS, controle de autorização e acesso, com fluxo controlado, monitoramento e gerenciamento
+                            de versões de API.
+                        </blockquote>
+                        <a href="https://aws.amazon.com/pt/api-gateway/" class="small" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/api-gateway
+                        </a>
+                    </section>
+                    <section>
+                        <h2 class="subtitle">API Gateway</h2>
+                        <h3>Exemplo de Fluxo</h3>
+                        <figure>
+                            <img src="https://d1.awsstatic.com/serverless/New-API-GW-Diagram.c9fc9835d2a9aa00ef90d0ddc4c6402a2536de0d.png"
+                                 alt="Como o API Gateway funciona">
+                            <figcaption>Exemplo de possíveis fluxos do API Gateway</figcaption>
+                        </figure>
+                        <a href="https://aws.amazon.com/pt/api-gateway/" class="smaller" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/api-gateway
+                        </a>
+                    </section>
+                    <section>
+                        <h2 class="subtitle">AWS Lambda</h2>
+                        <h3>Exemplo de Fluxo</h3>
+                        <figure>
+                            <img src="https://d1.awsstatic.com/product-marketing/Lambda/Diagrams/product-page-diagram_Lambda-WebApplications%202.c7f8cf38e12cb1daae9965ca048e10d676094dc1.png"
+                                 alt="AWS Lambda">
+                            <figcaption>Exemplo de Lambda com endpoints Web através do API Gateway</figcaption>
+                        </figure>
+                        <a href="https://aws.amazon.com/pt/lambda/" class="smaller" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/lambda
+                        </a>
+                    </section>
+                    <section>
+                        <h2 class="subtitle">AWS Lambda</h2>
+                        <h3>Exemplo de Fluxo</h3>
+                        <figure>
+                            <img src="https://d1.awsstatic.com/product-marketing/Lambda/Diagrams/product-page-diagram_Lambda-MobileBackends_option2.00f6421e67e8d6bdbc59f3a2db6fa7d7f8508073.png"
+                                 alt="AWS Lambda">
+                            <figcaption>
+                                Exemplo de Lambda com endpoints Web através do API Gateway e com notificações via SNS
+                            </figcaption>
+                        </figure>
+                        <a href="https://aws.amazon.com/pt/lambda/" class="smaller" target="_blank" rel="noopener">
+                            aws.amazon.com/pt/lambda
+                        </a>
+                    </section>
+                </section> <!-- API Gateway -->
+
+                <section> <!-- Hands-on -->
+                    <section>
+                        <h2>Hands-on</h2>
+                        <p>
+                            Vamos desenvolver uma função Lambda que irá consumir duas APIs externas, mesclar a saída
+                            delas e retornar esse dado
+                        </p>
+                        <p class="fragment">
+                            Depois, vamos criar uma aplicação no API Gateway para lidar com as requisições e criar
+                            <em>endpoints</em> públicos
+                        </p>
+                    </section>
+                    <section data-auto-animate>
+                        <h2>Hands-on</h2>
+                        <ol>
+                            <li>
+                                Instale o <a
+                                    href="https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html"
+                                    target="_blank" rel="noopener">AWS SAM CLI</a>, utilitário de linha de comando que
+                                facilita o <em>deploy</em> e o teste local da função
+                            </li>
+                        </ol>
+                    </section>
+                    <section data-auto-animate>
+                        <h2>Hands-on</h2>
+                        <ol start="2">
+                            <li>
+                                Inicie uma nova aplicação com <code>sam init</code>
+                                <dl class="smaller">
+                                    <dt>Which template source would you like to use?</dt>
+                                    <dd>Escolha <em>1 - AWS Quick Start Templates</em></dd>
+
+                                    <dt>Choose an AWS Quick Start application template</dt>
+                                    <dd>1 - Hello World Example</dd>
+
+                                    <dt>Use the most popular runtime and package type? (Python and zip) [y/N]:</dt>
+                                    <dd>N <em>(ou Y se quiser Python)</em></dd>
+
+                                    <dt>Which runtime would you like to use?</dt>
+                                    <dd>8 - nodejs14.x <em>(ou o runtime que preferir)</em></dd>
+
+                                    <dt>What package type would you like to use?</dt>
+                                    <dd>1 - Zip</dd>
+
+                                    <dt>Select your starter template</dt>
+                                    <dd>
+                                        2 - Hello World Example TypeScript <em>(ou 1 para JavaScript)</em>
+                                    </dd>
+
+                                    <dt>Project name [sam-app]:</dt>
+                                    <dd>
+                                        Escolha um nome ou pressionar <kbd>ENTER</kbd> para o padrão
+                                        <code>sam-app</code>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </ol>
+                    </section>
+                    <section data-auto-animate>
+                        <h2>Hands-on</h2>
+                        <ol start="3" class="margin">
+                            <li>
+                                Para entender toda a estrutura que o SAM cria, abra o arquivo <code>template.yaml</code>
+                            </li>
+                            <li>
+                                Execute <code>sam build</code> para compilar a aplicação
+                                <ul class="small">
+                                    <li>
+                                        Ou <code>sam build --beta-features</code> se tiver escolhido
+                                        TypeScript
+                                    </li>
+                                    <li>
+                                        Lembre-se de executar sempre que houver modificações no código
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </section>
+                    <section data-auto-animate>
+                        <h2>Hands-on</h2>
+                        <ol start="5" class="margin">
+                            <li>
+                                Teste a função localmente com <br>
+                                <code>sam local invoke HelloWorldFunction --event events/event.json</code>
+                                <p class="mb-0">Saída esperada:</p>
+                                <pre class="mt-0 shell-output">
+                                    START RequestId: 145a44a8-07cf-4b07-b292-1e8ab3a60464 Version: $LATEST
+                                    {"statusCode":200,"body":"{\"message\":\"hello world\"}"}
+                                    END RequestId: 145a44a8-07cf-4b07-b292-1e8ab3a60464
+                                    REPORT RequestId: 145a44a8-07cf-4b07-b292-1e8ab3a60464
+                                </pre>
+                            </li>
+                        </ol>
+                    </section>
+                    <section data-auto-animate>
+                        <h2>Hands-on</h2>
+                        <ol start="6" class="margin">
+                            <li>
+                                Abra a pasta da aplicação em sua IDE ou editor de texto e edite o arquivo
+                                <code>hello-world/app.ts</code>
+                            </li>
+                            <li>
+                                Codifique a chamada às APIs de <code>TODO</code> e <code>Users</code> do
+                                <a href="https://jsonplaceholder.typicode.com/" target="_blank" rel="noopener">
+                                    JSONPlaceholder
+                                </a>
+                                <ul class="small">
+                                    <li>
+                                        Sugestões de pacotes para facilitar o desenvolvimento:
+                                        <table class="small ml-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Linguagem</th>
+                                                    <th>Sugestões</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Node</td>
+                                                    <td>
+                                                        <a href="https://www.npmjs.com/package/axios" target="_blank"
+                                                           rel="noopener">axios</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>PHP</td>
+                                                    <td>
+                                                        <a href="https://www.php.net/manual/en/function.curl-exec.php"
+                                                           target="_blank" rel="noopener">cURL</a> ou
+                                                        <a href="https://packagist.org/packages/guzzlehttp/guzzle"
+                                                            target="_blank" rel="noopener">guzzle</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Pyhton</td>
+                                                    <td>
+                                                        <a href="https://docs.python-requests.org/en/latest/" target="_blank"
+                                                           rel="noopener">requests</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </section>
+                    <section data-auto-animate>
+                        <h2>Hands-on</h2>
+                        <ol start="8" class="margin">
+                            <li>
+                                Teste o API Gateway executando <code>sam local start-api</code> e acessando
+                                <a href="http://localhost:3000/hello" target="_blank" rel="noopener">
+                                    localhost:3000/hello
+                                </a>
+                            </li>
+                            <li>
+                                Quando estiver funcionando corretamente, basta realmente subir a função com
+                                <code>sam deploy --guided</code>
+                            </li>
+                        </ol>
+                    </section>
+                    <section data-auto-animate>
+                        <h2>Hands-on</h2>
+                        <p class="small">
+                            Guia para o <code>sam deploy --guided</code>:
+                        </p>
+                        <dl class="smallest dl-grid">
+                            <dt>Stack Name [sam-app]:</dt>
+                            <dd>workshop-lambda</dd>
+
+                            <dt>AWS Region [us-east-1]:</dt>
+                            <dd>us-east-1</dd>
+
+                            <dt>Confirm changes before deploy [y/N]:</dt>
+                            <dd>y</dd>
+
+                            <dt>Allow SAM CLI IAM role creation [Y/n]:</dt>
+                            <dd>y</dd>
+
+                            <dt>Disable rollback [y/N]:</dt>
+                            <dd>n</dd>
+
+                            <dt>LambdaWorkshop may not have authorization defined, Is this okay? [y/N]:</dt>
+                            <dd>y</dd>
+
+                            <dt>Save arguments to configuration file [Y/n]:</dt>
+                            <dd>y</dd>
+
+                            <dt>SAM configuration file [samconfig.toml]:</dt>
+                            <dd>[ENTER]</dd>
+
+                            <dt>SAM configuration environment [default]:</dt>
+                            <dd>[ENTER]</dd>
+
+                            <dt>Deploy this changeset? [y/N]:</dt>
+                            <dd>y</dd>
+
+                        </dl>
+                    </section>
+                </section> <!-- Hands-on -->
+
+                <section>
+                    <h1>Obrigado!</h1>
+                    <p>Siga-nos em nossas redes sociais:</p>
+                    <div id="thanks">
+                        <a href="https://www.facebook.com/OTTeraTV" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                 viewBox="0 0 29.94 29.94" height="64" width="64">
+                                <g>
+                                    <path d="M27.56,0.684H2.383C1.065,0.684,0,1.748,0,3.064v23.813c0,1.312,1.065,2.379,2.383,2.379H27.56
+                                        c1.312,0,2.38-1.066,2.38-2.379V3.064C29.939,1.748,28.871,0.684,27.56,0.684z M20.125,9.167c-0.619-0.362-1.11-0.648-1.727-0.648
+                                        c-0.604,0-1.12,0.151-1.384,0.405c-0.264,0.252-0.395,0.74-0.395,1.461v1.067h3.229l-0.699,2.968h-2.53v9.862h-4.056V14.42H10.67
+                                        v-2.968h1.895v-1.133c0-1.193,0.143-1.907,0.425-2.496c0.281-0.587,0.826-1.241,1.584-1.611c0.757-0.369,1.877-0.555,3.036-0.555
+                                        c1.188,0,2.116,0.396,3.254,0.715L20.125,9.167z" class="fill"/>
+                                </g>
+                            </svg>
+                            facebook.com/OTTeraTV
+                        </a>
+                        <a href="https://www.linkedin.com/company/ottera-inc" target="_blank">
+                            <svg height="64" viewBox="0 0 74 74" width="64" xmlns="http://www.w3.org/2000/svg">
+                                <g fill="none" fill-rule="evenodd">
+                                    <path d="M8,72 L64,72 C68.418278,72 72,68.418278 72,64 L72,8 C72,3.581722 68.418278,-8.11624501e-16 64,0 L8,0 C3.581722,8.11624501e-16 -5.41083001e-16,3.581722 0,8 L0,64 C5.41083001e-16,68.418278 3.581722,72 8,72 Z"
+                                          class="fill"/>
+                                    <path d="M62,62 L51.315625,62 L51.315625,43.8021149 C51.315625,38.8127542 49.4197917,36.0245323 45.4707031,36.0245323 C41.1746094,36.0245323 38.9300781,38.9261103 38.9300781,43.8021149 L38.9300781,62 L28.6333333,62 L28.6333333,27.3333333 L38.9300781,27.3333333 L38.9300781,32.0029283 C38.9300781,32.0029283 42.0260417,26.2742151 49.3825521,26.2742151 C56.7356771,26.2742151 62,30.7644705 62,40.051212 L62,62 Z M16.349349,22.7940133 C12.8420573,22.7940133 10,19.9296567 10,16.3970067 C10,12.8643566 12.8420573,10 16.349349,10 C19.8566406,10 22.6970052,12.8643566 22.6970052,16.3970067 C22.6970052,19.9296567 19.8566406,22.7940133 16.349349,22.7940133 Z M11.0325521,62 L21.769401,62 L21.769401,27.3333333 L11.0325521,27.3333333 L11.0325521,62 Z"
+                                          fill="#fff"/>
+                                </g>
+                            </svg>
+                            linkedin.com/company/ottera-inc
+                        </a>
+                        <a href="https://twitter.com/OTTeraTV" target="_blank">
+                            <svg role="img" width="64px" height="64px" viewBox="0 0 24 24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"
+                                      class="fill"></path>
+                            </svg>
+                            twitter.com/otteratv
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <img src="img/logo.png" alt="OTTera" id="footer">
+        <script src="reveal.js/dist/reveal.js"></script>
+        <script>
+            document.querySelectorAll('pre.shell-output').forEach((node) => {
+                let lines = node.innerHTML.split('\n'),
+                    regex;
+                for (let i = 0; i < lines.length; i++) {
+                    // lines[i] = lines[i].trim();
+                    if (((i === 0) || (i === lines.length - 1)) && (lines[i].trim() === '')) {
+                        lines.splice(i--, 1);
+                        continue;
+                    }
+
+                    if (!regex) {
+                        const count = lines[i].search(/\S/);
+                        if (count < 1) {
+                            break;
+                        }
+                        regex = new RegExp('^\\s{' + count + '}', 'g');
+                    }
+                    lines[i] = lines[i].replace(regex, '');
+                }
+                node.innerHTML = lines.join('\n');
+            });
+
+            Reveal.initialize({
+                center: true,
+                hash: true,
+                history: true,
+                mouseWheel: true,
+            });
+            Reveal.configure({
+                keyboard: {
+                    38: 'prev',
+                    40: 'next'
+                }
+            });
+        </script>
+    </body>
+</html>
